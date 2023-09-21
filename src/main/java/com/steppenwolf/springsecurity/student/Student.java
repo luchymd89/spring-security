@@ -1,9 +1,24 @@
 package com.steppenwolf.springsecurity.student;
 
+
+import java.util.Random;
+
 public class Student {
 
     private final Integer studentId;
     private final String studentName;
+
+    public Student(){
+        this.studentName = "";
+        this.studentId = 0;
+    }
+
+
+    public Student(String studentName) {
+        this.studentName = studentName;
+        Random random = new Random();
+        this.studentId = random.nextInt(20);
+    }
 
     public Student(Integer studentId, String studentName) {
         this.studentId = studentId;
@@ -16,5 +31,14 @@ public class Student {
 
     public String getStudentName() {
         return studentName;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                '}';
     }
 }
