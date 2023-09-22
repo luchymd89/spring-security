@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
@@ -47,7 +50,27 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
                .anyRequest()
                .authenticated()
                .and()
-               .httpBasic();
+               //.httpBasic(); For Basic Authentication
+                .formLogin() // For Form Based Authentication
+                    .loginPage("/login")
+                    .permitAll() // Login page
+                    .defaultSuccessUrl("/courses", true) //Redirect to start page
+                   // .usernameParameter("username") // Default value username, dont need it. If change it in login.html name="unnombre" value
+                   // .passwordParameter("password")  // Default value password, dont need it
+                .and()
+                .rememberMe() //Default to 2 weeks
+                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21)) // Extend the session to 21 days
+                    .key("somethingverysecure") //Key for hash to store the token
+                    //.rememberMeParameter("remember-me")  // Default value remember-me, dont need it
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) // Comment this line if csrf is enable
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .logoutSuccessUrl("/login");
+
     }
 
 
