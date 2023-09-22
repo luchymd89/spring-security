@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception{
        http
-               .csrf().disable()
+               // If the services are going to be used by a browse enable csrf, uncomment these two lines
+               .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+               .and()
+               //.csrf().disable()
                .authorizeRequests()
                // Order antMatchers matters
                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
