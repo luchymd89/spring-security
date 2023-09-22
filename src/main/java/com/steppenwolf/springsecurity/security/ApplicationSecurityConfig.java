@@ -32,9 +32,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception{
        http
                // If the services are going to be used by a browse enable csrf, uncomment these two lines
-               .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-               .and()
-               //.csrf().disable()
+               //.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+               //.and()
+               .csrf().disable()
                .authorizeRequests()
                // Order antMatchers matters
                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
